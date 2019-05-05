@@ -1,0 +1,359 @@
+const string studentData[] =
+{ "A1,John,Smith,John1989@gm ail.com,20,30,35,40,SECURITY",
+"A2,Suzan,Erickson,Erickson_1990@gmailcom,19,50,30,40,NETWORK",
+"A3,Jack,Napoli,The_lawyer99yahoo.com,19,20,40,33,SOFTWARE",
+"A4,Erin,Black,Erin.black@comcast.net,22,50,58,40,SECURITY",
+"A5,Hilary,Sturges,hsturg1@my.wgu.edu,34,10,10,10,SOFTWARE" };
+
+enum Degree {SECURITY, NETWORKING, SOFTWARE}; //declares enumerated data type
+
+SoftwareStudent::SoftwareStudent() {
+	degree = "SOFTWARE";
+};
+
+void SoftwareStudent::setDegree() {
+	enum Degree degree;
+	degree = SOFTWARE;
+	return;
+};
+
+string SoftwareStudent::getDegree() {
+	return degree;
+}
+
+SecurityStudent::SecurityStudent() {
+	degree = "SECURITY";
+};
+
+ void SecurityStudent::setDegree() {
+	enum Degree degree;
+	degree = SECURITY;
+	return;
+}; 
+
+string SecurityStudent::getDegree() {
+	return degree;
+}
+
+NetworkStudent::NetworkStudent() {
+	degree = "NETWORKING";
+};
+
+ void NetworkStudent::setDegree() {
+	enum Degree degree;
+	degree = NETWORKING;
+	return;
+}; 
+
+string NetworkStudent::getDegree() {
+	return degree;
+}
+
+class Roster {
+public:
+	Roster();
+	~Roster();
+	void printAll(Student* rosterArray);
+	void printInvalidEmails(Student* rosterArray);
+	void printAverageDaysInCourse(string studentID, Student* rosterArray);
+	void printByDegreeProgram(string degree, Student* rosterArray);
+	void remove(string studentID, Student* classRosterArray);
+	void static add(string studentID, string firstName, string lastName, string emailAddress, string age, string daysInCourse1, string daysInCourse2, string daysInCourse3, string degreeProgram, string studentNum);
+private:
+	int* subObj;
+};
+
+class Student {
+private:
+	string studentID;
+	string firstName;
+	string lastName;
+	string emailAddress;
+	string age;
+	string daysInCourses[3];
+	string studentArray[5];
+	string studentString;
+	string degree;
+public:
+	Student();
+	void setStudentID();
+	void setFirstName();
+	void setLastName();
+	void setEmail();
+	void setAge();
+	void setDaysInCourses();
+	void setDegree(string degree);
+	string getStudentID();
+	string getFirstName();
+	string getLastName();
+	string getEmail();
+	string getAge();
+	string* getDaysInCourses();
+	string getDegree();
+	void setStudentInfo();
+	string* getStudentInfo();
+	string print(string dataType);
+	string setStudentString(const string studentData[], int studentNum);
+	string getStudentString();
+	virtual string getDegreeProgram();
+};
+
+class SecurityStudent : public Student {
+public:
+	SecurityStudent();
+	void setDegree();
+	string getDegree();
+private:
+	string degree;
+};
+
+class SoftwareStudent : public Student {
+public:
+	SoftwareStudent();
+	void setDegree();
+	string getDegree();
+private:
+	string degree;
+};
+
+class NetworkStudent : public Student {
+public:
+	NetworkStudent();
+	void setDegree();
+	string getDegree();
+private:
+	string degree;
+};
+
+Student::Student() {
+	studentID = "00";
+	firstName = "None";
+	lastName = "None";
+	emailAddress = "None@none.com";
+	age = "0";
+	daysInCourses[3] = { 0 };
+	studentString = "None";
+
+	return;
+};
+
+void Student::setStudentID() {
+	this->studentID = studentString.substr(0, studentString.find(','));
+	return;
+};
+
+
+void Student::setFirstName() {
+	this->firstName = studentString.substr(studentID.length()+1,studentString.find(',',studentID.length()+1)-(studentID.length()+1));
+	return;
+};
+
+void Student::setLastName() {
+	this->lastName = studentString.substr(studentID.length() + firstName.length() + 2, studentString.find(',', studentID.length() + firstName.length() + 2) - (studentID.length() + firstName.length() + 2));
+	return;
+};
+
+void Student::setEmail() {
+	this->emailAddress = studentString.substr(studentID.length() + firstName.length() + lastName.length() + 3, studentString.find(',', studentID.length() + firstName.length() + lastName.length() + 3) - (studentID.length() + firstName.length() + lastName.length() + 3));
+	return;
+};
+
+void Student::setAge() {
+	this->age = studentString.substr(studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + 4, studentString.find(',', studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + 4) - (studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + 4));
+	return;
+};
+
+void Student::setDaysInCourses() {
+	daysInCourses[0] = studentString.substr(studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + 5, studentString.find(',', studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + 5) - (studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + 5));
+	daysInCourses[1] = studentString.substr(studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses[0].length() + 6, studentString.find(',', studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses[0].length() + 6) - (studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses[0].length()+ 6));
+	daysInCourses[2] = studentString.substr(studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses[0].length() + daysInCourses[1].length() + 7, studentString.find(',', studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses[0].length() + daysInCourses[1].length() + 7) - (studentID.length() + firstName.length() + lastName.length() + emailAddress.length() + age.length() + daysInCourses->length() + daysInCourses[1].length() + 7));
+};
+
+void Student::setDegree(string degree) {
+	if (degree == "NETWORK") {
+		NetworkStudent studentN;
+		studentN.setDegree();
+		this->degree = studentN.getDegree();
+	}
+	else if (degree == "SECURITY") {
+		SecurityStudent studentS;
+		studentS.setDegree();
+		this->degree = studentS.getDegree();
+	}
+	else if (degree == "SOFTWARE") {
+		SoftwareStudent studentS;
+		studentS.setDegree();
+		this->degree = studentS.getDegree();
+	}
+};
+
+string Student::getStudentID() {
+	return studentID;
+};
+string Student::getFirstName() {
+	return firstName;
+};
+string Student::getLastName() {
+	return lastName;
+};
+string Student::getEmail() {
+	return emailAddress;
+};
+string Student::getAge() {
+	return age;
+};
+
+string* Student::getDaysInCourses() {
+	return daysInCourses;
+};
+
+string Student::getDegree() {
+	return degree;
+};
+
+void Student::setStudentInfo() {
+	studentArray[0] = this->studentID;
+	studentArray[1] = this->firstName;
+	studentArray[2] = this->lastName;
+	studentArray[3] = this->emailAddress;
+	studentArray[4] = this->age;
+	
+};
+
+string* Student::getStudentInfo() {
+	return studentArray;
+};
+
+string Student::print(string dataType) {
+	if (dataType == "ID") {
+		cout << this->getStudentID();
+	}
+	else if (dataType == "firstName") {
+		cout << this->getFirstName();
+	}
+	else if (dataType == "lastName") {
+		cout << this->getLastName();
+	}
+	else if (dataType == "email") {
+		cout << this->getEmail();
+	}
+	else if (dataType == "age") {
+		cout << this->getAge();
+	}
+	else if (dataType == "daysInCourses") {
+		string* daysInCoursesToPrint = this->getDaysInCourses();
+		cout << "{" << daysInCoursesToPrint[0] << ", " << daysInCoursesToPrint[1] << ", " << daysInCoursesToPrint[2] << "}";
+	}
+	else if (dataType == "degree") {
+		if (this->Student::getDegree() == "NETWORK") {
+			cout << "Networking";
+		} cout << this->Student::getDegree();
+	}
+	return " ";
+};
+
+string Student::setStudentString(const string studentData[], int studentNum) {
+	this->studentString = studentData[studentNum];
+	return " ";
+};
+
+string Student::getStudentString() {
+	return studentString;
+};
+
+string Student::getDegreeProgram() {
+	return " ";
+}
+
+void main() {
+	Roster classRoster;
+	cout << "Scripting and Programming - Applications (C867), C++, #000904699, Hilary Sturges" << endl << endl;
+	
+	SecurityStudent student1;
+	NetworkStudent student2;
+	SoftwareStudent student3;
+	SecurityStudent student4;
+	SoftwareStudent student5;
+	NetworkStudent student6;
+
+	const int NUM_OF_ARR_VALS = 7;
+
+	student1.setStudentString(studentData, 0);
+	student1.setStudentID();
+	student1.setFirstName();
+	student1.setLastName();
+	student1.setEmail();
+	student1.setAge();
+	student1.setDaysInCourses();
+	student1.setDegree();
+	student1.setStudentInfo();
+	student1.Student::setDegree("SECURITY");
+
+	student2.setStudentString(studentData, 1);
+	student2.setStudentID();
+	student2.setFirstName();
+	student2.setLastName();
+	student2.setEmail();
+	student2.setAge();
+	student2.setDaysInCourses();
+	student2.setDegree();
+	student2.setStudentInfo();
+	student2.Student::setDegree("NETWORK");
+
+	student3.setStudentString(studentData, 2);
+	student3.setStudentID();
+	student3.setFirstName();
+	student3.setLastName();
+	student3.setEmail();
+	student3.setAge();
+	student3.setDaysInCourses();
+	student3.setDegree();
+	student3.setStudentInfo();
+	student3.Student::setDegree("SOFTWARE");
+
+	student4.setStudentString(studentData, 3);
+	student4.setStudentID();
+	student4.setFirstName();
+	student4.setLastName();
+	student4.setEmail();
+	student4.setAge();
+	student4.setDaysInCourses();
+	student4.setDegree();
+	student4.setStudentInfo();
+	student4.Student::setDegree("SECURITY");
+
+	student5.setStudentString(studentData, 4);
+	student5.setStudentID();
+	student5.setFirstName();
+	student5.setLastName();
+	student5.setEmail();
+	student5.setAge();
+	student5.setDaysInCourses();
+	student5.setDegree();
+	student5.setStudentInfo();
+	student5.Student::setDegree("SOFTWARE");
+
+	Student testArray[NUM_OF_ARR_VALS] = { student1, student2, student3, student4, student5 };
+	Student* classRosterArray[NUM_OF_ARR_VALS];
+	for (int i = 0; i < NUM_OF_ARR_VALS; i++) {
+		classRosterArray[i] = &testArray[i];
+	};
+
+	classRoster.printAll(*classRosterArray);
+
+	classRoster.printInvalidEmails(*classRosterArray);
+
+	for (int i = 0; i < 5; ++i) {
+		cout << classRosterArray[i]->getStudentID() << ": ";
+		classRoster.printAverageDaysInCourse(classRosterArray[i]->getStudentID(), *classRosterArray);
+	} cout << endl;
+
+	cout << "Software Students:" << endl;
+	classRoster.printByDegreeProgram("SOFTWARE", *classRosterArray);	
+
+	classRoster.remove("A3", *classRosterArray);
+	classRoster.remove("A3", *classRosterArray);
+	cout << endl;
+
+	return;
+};
